@@ -1,0 +1,23 @@
+{
+    "name": "food_delivery_app",
+    "version": "1.0.0",
+    "description": "this is a restaurant's personal food delivery application.",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon server.js",
+        "serve": "node server.js"
+    },
+    "author": "AnujTiwari",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.6",
+        "express": "^4.17.1",
+        "express-ejs-layouts": "^2.5.0"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.3",
+        "laravel-mix": "^6.0.11",
+        "nodemon": "^2.0.7"
+
+    }
+}
