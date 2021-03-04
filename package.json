@@ -4,20 +4,34 @@
     "description": "this is a restaurant's personal food delivery application.",
     "main": "index.js",
     "scripts": {
+        "start": "nodemon server.js",
         "dev": "nodemon server.js",
         "serve": "node server.js"
     },
     "author": "AnujTiwari",
     "license": "ISC",
     "dependencies": {
+        "bcrypt": "^5.0.1",
+        "body-parser": "^1.19.0",
+        "connect-mongo": "^4.2.2",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
         "ejs": "^3.1.6",
         "express": "^4.17.1",
-        "express-ejs-layouts": "^2.5.0"
-    },
-    "devDependencies": {
-        "cross-env": "^7.0.3",
-        "laravel-mix": "^6.0.11",
-        "nodemon": "^2.0.7"
-
-    }
+        "express-ejs-layouts": "^2.5.0",
+        "express-flash": "0.0.2",
+        "express-session": "^1.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "laravel-mix": "^6.0.13",
+        "mongoose": "^5.11.18",
+        "nodemon": "^2.0.7",
+        "passport": "^0.4.1",
+        "passport-local": "^1.0.0"
+      },
+      "devDependencies": {
+        "postcss": "^8.1.14",
+        "resolve-url-loader": "^3.1.2",
+        "sass": "^1.32.8",
+        "sass-loader": "^10.1.1"
+      }
 }
