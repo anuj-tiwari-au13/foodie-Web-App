@@ -1,64 +1,69 @@
-const express = require("express");
-const path = require("path"); // core module or inbuild module.
-
-const app = express(); // express() returns the object of express , which is stored in app variable.
-
-const PORT = process.env.PORT || 3000;
-// process.env :  it is stored inside node process
-// if there exists a varible PORT ,we will use that.
-// if not present , we will run it on 3000.
-
-// CONFIGURING THE TEMPLATE ENGINE
-const ejs = require("ejs");
-const expressLayout = require("express-ejs-layouts");
-//
+const express = require('express');
+const app = express();
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const session =require('express-session');
-const { Cookie } = require('express-session');
-const flash = require('express-flash');
-const passport = require('passport');
 
+const port = process.env.PORT || 7000
 
-//database connection
-const url = "mongodb+srv://admin:anj1234@cluster0.8jt9w.mongodb.net/foodie?retryWrites=true&w=majority";
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: true
+mongoose.connect('mongodb+srv://admin:anj1234@cluster0.8jt9w.mongodb.net/foodie?retryWrites=true&w=majority',
+
+    {       
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useFindAndModify: true,
+     
+    },
+    console.log('Database connected...')
+);
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+//adding the heaader  to over-write cors error that are encountered while using browsers
+//giving access to all requests 
+app.use((req, res, next) => {
+    res.header('Access-control-Allow-Origin', "*");
+    res.header(
+        'Access-control-Allow-Origin',
+        "Origin,X-Requested-With,Content-Type,Accept,Authorization"
+    );
+    if (req.method === 'OPTIONS') {
+        res.header('Acces-Control-Allow-Methods', 'PUT,POST,PATCH,DELETE,GET');
+        return res.status(200).json({});
+
+    }
+    next();
 });
 
 
-const connection = mongoose.connection;
-connection.once('open', () => {
-    console.log('Database connected...');
-}).catch(err => {
-    console.log('connection failed');
+
+const menuRoutes = require('./api/routes/menu');
+app.use('/menu', menuRoutes);
+
+const orderRoutes = require('./api/routes/order');
+app.use('/orders', orderRoutes);
+
+const userRoutes = require('./api/routes/user');
+app.use("/user", userRoutes);
+
+
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status=404;
+    next(error);
+})
+
+app.use((error, req, res, next) => {
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    });
 });
 
-// passport config
-const passportInit = require('./app/config/passport')
-passportInit(passport)
-app.use(passport.initialize())
-app.use(passport.session())
-
-
-//ASSETS  ---> passing our static folder ---> public ---> to make it take css also to browser server.
-app.use(express.static('public'));
-app.use(express.urlencoded({extended:false}))
-app.use(express.json())
-
-
-// SET TEMPLATE ENGINE
-app.use(expressLayout);
-app.set("views", path.join(__dirname, "/resources/views"))
-app.set("view engine", "ejs");
-
-
-require('./routes/web')(app)
-
-
-
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
 });
