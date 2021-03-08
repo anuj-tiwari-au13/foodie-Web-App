@@ -1,52 +1,132 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path"); // core module or inbuild module.
 
 const app = express(); // express() returns the object of express , which is stored in app variable.
+
+// CONFIGURING THE TEMPLATE ENGINE
+const ejs = require("ejs");
+const expressLayout = require("express-ejs-layouts");
+
+
 
 const PORT = process.env.PORT || 3000;
 // process.env :  it is stored inside node process
 // if there exists a varible PORT ,we will use that.
 // if not present , we will run it on 3000.
 
-// CONFIGURING THE TEMPLATE ENGINE
-const ejs = require("ejs");
-const expressLayout = require("express-ejs-layouts");
-//
-const mongoose = require('mongoose');
-const session =require('express-session');
-const { Cookie } = require('express-session');
-const flash = require('express-flash');
-const passport = require('passport');
 
 
-//database connection
-const url = "mongodb+srv://admin:anj1234@cluster0.8jt9w.mongodb.net/foodie?retryWrites=true&w=majority";
-mongoose.connect(url, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: true
-});
+
+const mongoose = require("mongoose");
+
+const session = require("express-session");
+
+const flash = require("express-flash");
 
 
+// var MongoDbStore = require('connect-mongo')(session);
+
+// var MongoDbStore = require('connect-mongodb-session')(session);
+const MongoDbStore = require("connect-mongo").default;
+
+const passport = require('passport')
+
+
+//Database Connection
+const url = "mongodb+srv://xyz:xyz@cluster0.odtx5.mongodb.net/item?retryWrites=true&w=majority"
+
+
+mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: true });
 const connection = mongoose.connection;
+
+
+
 connection.once('open', () => {
-    console.log('Database connected...');
+    console.log('Database Connected...');
 }).catch(err => {
-    console.log('connection failed');
+    console.log('Connection Failed... ');
 });
 
-// passport config
+
+
+
+
+
+
+// const url = "mongodb+srv://xyz:xyz@cluster0.odtx5.mongodb.net/item?retryWrites=true&w=majority"
+// mongoose.connect(url, {
+//         useNewUrlParser: true,
+//         useCreateIndex: true,
+//         useUnifiedTopology: true,
+//         useFindAndModify: true,
+
+//     },
+//     console.log('Database connected...')
+// );
+
+// const url = "mongodb+srv://admin:anj1234@cluster0.8jt9w.mongodb.net/foodie?retryWrites=true&w=majority";
+
+
+
+
+
+
+// Session Store
+let mongoStore = MongoDbStore.create({
+    mongoUrl: url,
+    collectionName: "sessions",
+});
+
+
+
+// let mongoStore = MongoDbStore.create({
+//     mongooseConnection: connection,
+//     collection: 'sessions'
+// })
+
+
+
+
+// Session configuration 
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        store: mongoStore,
+        cookie: { maxAge: 1000 * 60 * 60 * 24 }, //cookie valid for 24 hours
+    })
+);
+
+// Passport Config
 const passportInit = require('./app/config/passport')
-passportInit(passport)
+passportInit(passport);
 app.use(passport.initialize())
 app.use(passport.session())
 
 
+
+
+app.use(flash());
+
+
 //ASSETS  ---> passing our static folder ---> public ---> to make it take css also to browser server.
 app.use(express.static('public'));
-app.use(express.urlencoded({extended:false}))
+
+app.use(express.urlencoded({ extended: false }))
+
 app.use(express.json())
+
+
+//global middleware
+app.use((req, res, next) => {
+    res.locals.session = req.session
+    res.locals.user = req.user
+    next()
+
+})
 
 
 // SET TEMPLATE ENGINE
@@ -55,7 +135,14 @@ app.set("views", path.join(__dirname, "/resources/views"))
 app.set("view engine", "ejs");
 
 
-require('./routes/web')(app)
+
+
+require("./routes/web")(app);
+
+
+
+
+
 
 
 

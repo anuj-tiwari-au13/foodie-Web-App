@@ -23,251 +23,34 @@
 
     <div class="grid grid-cols-4 gap-x-12 gap-y-16">
 
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish.png" alt="food items">
-            <div class="mx-10 text-center">
+        <% menus.forEach(function(dish){ %>
+            <div>
+                <img class="mx-10 h-40 mb-4 mx-auto" src="/img/<%=dish.image %>" alt="food items">
+                <div class="mx-10 text-center">
 
-                <h2 class=" mb-4 text-lg"> KADHAI PANEER </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
+                    <h2 class=" mb-4 text-lg">
+                        <%= dish.name %>
+                    </h2>
+                    <span class="py-1 px-4 rounded-full uppercase text-xs size "><%= dish.size %></span>
 
-                <div class="flex items-center justify-around py-4">
+                    <div class="flex items-center justify-around py-4">
 
-                    <span class="font-bold text-lg"> Rs. 250 </span>
+                        <span class="font-bold text-lg"> Rs. <%= dish.price %></span>
 
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
+                        <button data-dish="<%= JSON.stringify(dish) %>" id="add-to-cart" class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
+                                <span>+</span>
+                                <span class="ml-4 ">Add</span>
+                            </button>
+                    </div>
                 </div>
+
             </div>
 
-        </div>
 
 
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish2.png" alt="food items">
-            <div class="mx-10 text-center">
+            <% }) %>
 
-                <h2 class=" mb-4 text-lg"> PANEER LABAABDAR </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size">FULL</span>
 
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish3.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg">PANEER BUTTER MASALA </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish4.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> PANEER DO PAYAZA </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish5.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> MUSHROOM MALAI </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish6.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> MUSHROOM SEZWAAN </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish7.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> KADHAI PANEER </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish8.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> KADHAI PANEER </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish9.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> KADHAI PANEER </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish12.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> WASABI MUSHROOM </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish10.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> SPRING ROLL </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div>
-            <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish11.png" alt="food items">
-            <div class="mx-10 text-center">
-
-                <h2 class=" mb-4 text-lg"> CHICKEN BREAST </h2>
-                <span class="py-1 px-4 rounded-full uppercase text-xs size ">FULL</span>
-
-                <div class="flex items-center justify-around py-4">
-
-                    <span class="font-bold text-lg"> Rs. 250 </span>
-
-                    <button class="add-to-cart py-1 px-6 rounded-full flex items-center font-bold">
-                            <span>+</span>
-                            <span class="ml-4 ">Add</span>
-                        </button>
-                </div>
-            </div>
-
-        </div>
 
 
 
@@ -295,7 +78,7 @@
                         <img alt="testimonial" src="https://dummyimage.com/106x106" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
                         <span class="flex-grow flex flex-col pl-4">
                 <span class="title-font font-medium text-gray-900">Holden Caulfield</span>
-                        <span class="text-gray-500 text-sm">UI DEVELOPER</span>
+                        <span class="text-gray-500 text-sm">KARNATAKA, INDIA</span>
                         </span>
                     </a>
                 </div>
@@ -310,7 +93,7 @@
                         <img alt="testimonial" src="https://dummyimage.com/107x107" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
                         <span class="flex-grow flex flex-col pl-4">
                 <span class="title-font font-medium text-gray-900">Alper Kamu</span>
-                        <span class="text-gray-500 text-sm">DESIGNER</span>
+                        <span class="text-gray-500 text-sm">MAHARASHTRA, INDIA</span>
                         </span>
                     </a>
                 </div>
