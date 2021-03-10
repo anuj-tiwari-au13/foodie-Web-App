@@ -136,7 +136,7 @@ app.set("view engine", "ejs");
 
 
 
-
+//routes
 require("./routes/web")(app);
 
 

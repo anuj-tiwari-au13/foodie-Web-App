@@ -1,0 +1,1252 @@
+1) Create Node Project and Install Node, NPM and all the dependencies.
+    >> npm init ---> Creates a .json file , fill details
+                ----> use npm init -y , automatically fills up all details
+
+2) Create project Directory Structure.  
+    
+    >> add folder public --> will put all the public assets like CSS, js file , images, fonts etc       
+        >>add css folder
+            >>create file app.css
+        >>add js folder
+            >> create app.js 
+        >>add img folder 
+
+    >> add app folder to the root Structure.( it will store all the backend logic)
+        
+        >> add http folder (files related to requests like controllers, middlewares stored here).
+            >> add controllers folder(it will have all the controllers, we will store all the logics )
+            >> add middleware folder(it will store all the middlewares)
+        >> add models folder( since we are using mvc pattern, so this is MODEL out of model view controller = MVC, It will store all the models to interact with database. )
+   
+        >> add config folder(will store all the configurations like authentication system)
+   
+    
+    >> add resources folder to root structure.(it will store all the views(means templates) , all saas files, all uncompiled js files )
+        >> add folder--> js
+            >> create file app.js (all the client code of js will come here.)
+
+        >> add folder --> scss 
+            >> create file app.scss ( all the css will come here.) 
+        
+
+        NOTE :  THE TOOLS WE WILL USE LATER, WILL MAKE ALL FILES INSIDE RESOURCES/JS/APP.JS , WILL BE COMPILED AND SAVED INSIDE PUBLIC/JS/APP.JS OR INSIDE CSS.
+                AND THEN ALL THE COMPILED FILES INSIDE PUBLIC , WILL BE INCLUDED INSIDE INDEX FILE.
+    
+    
+        >> add folder --> views (contains all the html code as templates.)
+    
+    
+    
+    >> add routes folder to root structure. (will store all our routes(means whatever url we put in urlbar after domain name. root route is --> /)  )
+        >> create file web.js (store all web related routes)
+        >> create file api.js (stores all API routes.)
+
+
+*************************BASIC STRUCTURE OF PROJECT COMPLETED ***************
+
+3) 
+    - install dependencies.
+        - express (npm install express) - Its a framework for node applications . All the routings or request related work of HTTP are made easier with express with less code.  
+        - ejs (a template engine)
+        - express-ejs-layouts (? what do ?)
+        (npm install ejs express-ejs-layouts)
+
+    - install Dev-dependencies.(means when we are creating the projects i.e development phase , we need it and not in production phase.)
+        - nodemon
+        (npm install nodemon -D) : -D is used bcz it is a dev dependency.
+
+
+    NOTE: package-lock.json : file is used to keep the track of versions of dependencies. 
+          node-modules folder : all dependecies gets downloaded here. But we added only three then how its showing many ? , its bcz every has its own package.json file containing there respective dependencies. So it installs there dependencies also.
+
+********************************************************************
+
+4) Create Express server : 
+    >> create a server.js file in root structure.(it will be the main file from where we will start running our code.)
+
+    - import express module
+    const express = require("express");
+
+
+    - const app = express(); // express() returns the object of express , which is stored in app variable.
+                            // give it any name. this object has all the functionalities that express provide us.)
+
+    - app.listen(PORT, () => {
+      console.log("Listening on port 3000.")
+        });
+        // now our server will start at port 3000,;
+        // but a problem is that port 3000 is avaiable on our local machine, but when we will deploy this on live server, port 3000 might not be available. So to fix it we just create variable PORT .
+    
+    - const PORT = process.env.PORT || 3000; 
+        // process.env :  it is stored inside node process
+        // if there exists a varible PORT ,we will use that.
+        // if not present , we will run it on 3000.
+        // first of all it will check env variables inside process.
+        // if it finds a variable named PORT inside. then it will put its value here. 
+        // if not found || --> it will set it to 3000.. its like 
+        //        if (process.env.PORT)
+                {
+                    PORT = process.env.PORT
+                } else {
+                    PORT = 3000
+                }
+
+    - our server got created,  run node server.js or node server( without using .js also  , it will work. )
+        - we will see in console - listening to port 3000.
+
+        - currently , after every change in code , we have to stop server and run it again.
+        - to perform this automatically - use nodemon.
+
+        - for using nodemon, go to package.json file 
+            - inside scripts --> 
+            "scripts": {
+                  "dev": "nodemon server.js",   // for development phase
+                  "serve": "node server.js"     // for live server
+                       }
+            - to run commands present inside scripts.
+                    npm run <script key> 
+                    eg - npm run serve  or npm run dev
+
+****************************************************************
+
+5) Server got created --> open browser --> Cannot GET /
+        // browser not understanding the /
+        // so we craete a route using express oject 'app'.
+
+
+    -   app.get("/", (req, res) => {
+        res.send("HELLO FROM SERVER");
+
+            })
+        // we dont need to display this text on root route /, instead we want our homepage to display our applications homepage.
+        // so here we have to render the html FILE.
+        // so before using res.render (<filename>) , we have to configure our template engine here EJS   
+        // TO CONFIGURE:
+                // import it _ 
+                const ejs = require("ejs");
+                const expressLayout = require(express - ejs - layouts);
+
+                // set the template engine.
+                         // SET TEMPLATE ENGINE
+                            app.use(expressLayout); ---> express will now know which layout we will use.
+                            
+                            // now we need to tell node , where our template files lie. 
+                            app.set("views", path.join(__dirname, "/resources/views")) ---> for this we need to generate path -->  for this we have to add a core module of node -path ---> const path = require("path"); --->  
+                            // path.join(__dirname, "/resources/views") -->  it tells the complete path were our Template engine files lie or views.
+
+
+                // now,  we need to tell node which template engine we going to use. 
+                        app.set("view engine", "ejs");
+
+
+                // open views folder in resources ---> create a file home.ejs (it will contain our html code.) --> EJS helps the variables coming from server to get embedded to our html -->  Normal HTML does  not allow this feature.
+                            - <h1> HELLO FROM HOMEPAGE </h1>
+
+                            - now finally in server.js --> instead of res.send("HELLO") --> use res.render("home")
+                                    // we directly used "home", cz we have already defined the path of views --> with path.join. --> so it will serach inside views and find home.ejs ---> and will render it.
+                // npm run dev ----> see localhost:3000 ---> HTML output from home.ejs.
+
+                note: route / we have created need to be transferred to routes folder ---> we will do it ahead.
+
+**************************************************************** 
+6) GITHUB SETUP AND FIRST COMMIT 
+        // git required for version control of projects.
+        // type --> git init ---> creates an empty repo ---> named .git (usually hidden)
+
+      NOTE : both GIT and GITHUB are different things. GIT is a program and GITHUB is a service.
+
+        // add .gitignore ---> add node-modules , .ds to it.
+        // git add . 
+        // git commit -m "<message>, here initial as this is first commit"
+
+*********************************************************************************************************************
+**********************************DO FIRST COMMIT HERE ************************************************************** 
+*********************************************************************************************************************
+
+7) INSTALL LARAVEL MIX 
+            // AN Elelgant wrapper around a webpacks. 
+            // its like using webpack , but since it requires a bit more configurations , we use laravel mix.
+            // it internally uses webpacks only but very less config.
+            // it works under laravel framework. 
+            // main importance is that it can be used apart from inside laravel apps also, in standalone projects also.
+            // VISIT LARAVEL SITE ---> install it. ----> stand-alone project ---> npm install laravel-mix --save-dev ---> --save-dev === -D ---> installing dev dependencies.
+            // Create a Mix Configuration File ----> run this command ----> touch webpack.mix.js ---> creates webpack.mix.js file in the root structure.
+            // AS show in website instructions ---> Define your compilation ---> Open webpack.mix.js and add that code to file. 
+            
+            NOTE - as we have already seen ---> files inside js and scss of resources --->  we have to compile it and store inside js and CSS insdie public folder.
+
+            // npx mix
+           // FOLLOW INSTRUCTIONS ON WEBPAGE TO INSTALL LARAVEL
+                   >> npm install laravel-mix --save-dev
+                   >> touch webpack.mix.js
+                   >> let mix = require('laravel-mix');
+
+                      mix.js('resources/js/app.js', 'public/js/app.js').sass('resources/scss/app.scss', 'public/css/app.css'); 
+
+                    >> // resources/sass/app.scss
+                            $primary: red;
+
+                            body {
+                                 color: $primary;
+                            } 
+                    >> // src/app.js
+                        console.log("Hello");
+
+                   >> run ---> npx mix --->  to compile
+
+                   >> after compiling they get stored in public/js/app.js and public/css/app.css
+
+        NOTE : files in resources section does not get loaded by browser ever or have access to them.
+                public files have access.
+                browser can access our public files with help of a url
+                SO WHY DO WE HAVE THESE TWO FOLDERS containing same files css and js ?? RESOURCES AND PUBLIC ??
+                // 
+                Sass is not loadable by the browser----> thats y called a CSS pre processor.
+                browser never loaded the sass file, bt it can load css file.
+                thats why sass is in resources folder and css in public folder.
+                we need to compile our sass to css ----> for browser loads.
+
+                we need to pre process sass, before its actual loadeing of browser.
+                our browser can then access CSS.
+                middleware req for pre processing sass ---> css  , is a WEBPACK.
+
+                LARAVEL-MIX is a beautified wrapper around webpack.
+
+                likewise js also need to be proceeesed for browsers , as some of the advanced js is not understandable by browsers.
+                We can do all stuff with webpacks. so that every browser supports everything.
+
+
+                Setup of webbacks is complex. So we have LARAVEL-mix with easy setup. 
+
+
+        NOTE : TO GET CSS OR JS GET COMPILED TO PUBLIKC FOLDER, BEFORE RUNNING APP USING ---> NODE SERVER.JS ---> RUN ---> NPX MIX---> IT WILL COMPILE ALLYOUR CSS TO PUBLIC folder.
+
+
+
+
+
+
+*************************************************************************************************************
+
+8) SETUP TAILWINDS CSS
+            >> go to website.
+            >> installation ---> get CDN link
+            >> go to resources >> views >> home.ejs >> html biolerplate ---> paste the link.
+            >> add cdn 
+            ?/ add css link of public folder --> app.css
+            >> addd script ---> app.js of public folder , which we recieved after compilation.
+
+            
+**************************************************************************************************************
+9) Add google fonts.
+            >> add link to head.
+
+
+**************************************************************************************************************
+
+NOTE : running server ---> we can see only html going to browser and not the css, bcz by default server responds to our html files 
+         so , we have to tell express ---> if we has added local css file. we want response from that css file.
+         for it ---> server.js --> and tell where are assets ---> 
+         //ASSETS  ---> passing our static folder ---> public
+                        app.use(express.static('public'))
+
+
+            >> now go to browser and se output. ---> css addded + HTML
+
+            >> all checked now we can remove the css, as we have to put good one.
+
+            >>> WHY SASS ? 
+            >>Sass is a meta-language on top of CSS that's used to describe the style of a document cleanly and structurally, with more power than flat CSS allows. Sass both provides a simpler, more elegant syntax for CSS and implements various features that are useful for creating manageable stylesheets
+
+
+
+
+************************************************************************************************************************
+*****************************************************************
+10) DESIGN OUR HOMEPAGE USING HTML /CSS  ---> (WE WILL BE USING TAILWIND CSS)
+
+        // step1 : define all the colors to be used in page. so that we can use that variable when we need that color.Also it will easy to change color, just do it at one place and its done. , if we want to do that in future.
+
+        // go to app.scss ---> to beautifully segregate the code, we make separate file for all the variables we will use.
+
+        // create another file inside resources / scss ---> _variables.scss (we can remove the underscore as well , but if we keep underscore it bocomes a naming convention that its not the main file , its a partial file and we have to include it under another file.)
+
+        // after listing all the variables inside _variables file, we have to include/ import that file in app.scss.
+
+                    ---> in app.scss ---> @import './variables';
+                            // here we can avoid _ and .scss , coz sass automatically understands that its a partial file. 
+                            // firstly we are defining all the color variables in _variables.scss
+                            // as we have already wriiten import code in app.scss, we can used that variables inside app.scss.
+
+        // add normal css inside app.scss along with variables..
+
+                ---> -webkit-font-smoothing: antialiased; ---> performs font smoothing 
+
+        // lets go to ---> resources---> views ---> home.ejs . to write html.
+                    ---> creating NAVBAR
+
+                                ---> as wwe see its devided into two parts ---. left logo part and right links part.
+                                ----> so in body firstly we create a nav tag ---> for two parts add two divs 
+                                ---> first div has logo and second div has links and cart image.
+                                ----> move it all inside a container ---> using tailwinds classses ---> use < nav  class="container mx-auto" ---> mx-auto centers it.
+                                ----> want links on right side ---> use flex ---> Simply add flex class and add items-center to align center vertically. < nav  class="container mx-auto flex items-center">
+                                ----> logo and links comes in same line.
+                                ----> to shift links to right side.----> justify-between. ---> < nav  class="container mx-auto flex items-center justify-between">
+                                -----> to make links come in single line ---> in ul add classes = flex items-center ----> <ul class='flex items-center'>
+                                -----> addd space btw the links --> <li class="ml-6" -----> add to all li ----> margin left -6 -----> space comes in btw links.
+
+                                -----> to make cart image visible---> inside app.scss ----> add ---> 
+                                 >>  nav li:last-child a {backgroound: $primary} ---> last-child points to last list item ----> nav>>li>>last-child>>a {}
+                                 >> in ejs ---> last li ---> < a class="inline-blockk px-4 py-2 rounded" -----> and also  <img class='inline-block px-6 py-2' src="/img/logo.png" alt="logo">
+                                 >> In above ----> by default its inline, but we need to provide it width and height ,so we need inline-block. ---> px means horizontal padding ---> py in vertical padding ---> for rounded corners -- rounded.
+                                 >> in < nav  add py-4 ---> gives padding 4 top and bottom.
+
+                                 >> we need to give hover effect to links.
+                                 >> in app.scss ---> add ---> we could have used -->  nav li a:hover{color:$primary;} it works fine in scss also ---> but since we use scss we do it scss way ----> nav li a {&:hover{color:$primary;}} 
+                                                            
+                                                                              nav li:last-child a {
+                                                                                background: $primary;
+                                                                                    &:hover {
+                                                                                             background: $primary-hover; // 
+                                                                                              }
+                                                                                            }
+
+                                >> sinc hover is working very fast --> we have to slow it a bit ---> use transiton ---> 
+                                >> in ---->  nav li a { transition : all .3s ease-in-out }
+                                NOTE : MAKE SURE THIS TRANSITION PROPERTY REMAINS SAME AT EVERY PLACE O9N SITE. SO TO MAKE IT CONSTANT THROUGH OUT THE SITE --->    lets creaste it also as variable and use it directly as color variables..
+
+                                >> $smooth: all .3s ease-in-out; in variables can replace tranition value in app.scss.
+
+                     *********************************************************************************************************************************************************************************
+                                NAVBAR COMPLETED 
+                    **********************************************************************************************************************************************************************************
+
+
+                    -----> CREATING HERO SECTION --->
+                                                ---> 18:48 v4
+
+                
+                            // here there is also two sections like navbar, one contains image and other text.
+
+                                    ----> create section tags ---> class="hero"
+                                            ----> create a wrapper --> div -----> inside this we have two parts ---> so we add two divs ---> <div></div> and <div> </div> one is left and other right.
+                                            -----> our wrapper div will be a container of tailwinds css ---> class= "container mx-auto" ---> mx-auto --> centers it.
+                                                    -----> for left part <div> </div> ----> craete h6 heading --> for a bit italic ---> we will use html tag <em> ---> <h6><em> are u hungry</em></h6>
+                                                    ---> add h1 for bigger text below h6 ---> <h1> Dont't wait ! </h1> 
+                                            
+                                                    ----->for right part <div></div> -----> it has an image ---> <img src = "/img/hero-pizza.png" >
+                                                    ---> we get both parts of hero area of webpage. but they are not perfectly placed. image is not on right side, and text on left.
+                                                
+                                                    ---> to structure it we will again use ---> FLEX --> as we want both div part to go left and right ---> flex will be applied on its parent tag.
+                                                    --->here in this case parent is container classs  div tag ---> <div class="container mx-auto flex items-center justify-between"> ----> items-center and justify-between for vertically center and shifting it right respectively.
+                                                    --->  now, customiszing text section of container hero section.
+                                                    ----> increase font of h6 tag. ---> <h6 class="text-lg"><em>Don’t Starve, Just Order</em></h6>
+                                                    ----> inscrease font of h1 tag as well --->   <h1 class="text-6xl font-bold">Freshness Delivered</h1> ---> increases the font and turn it bold. 
+                                                   ---> as we see, img and text section have large space btw them ---> if wee make both section widths equal it will be solved. ----> ass class to left section div ---> class= " w-1/2" --> its width become 1/2. ---> same class is added to right section div of image---> class="w-1/2".
+                                                   ---->add padding to hero class ----> py-16  -----> add separate navbar and hero a bit.
+                                                   ---> to craete a spearation btw nav and hero ----> we change color of hero section a bit.
+                                                   ---> IN App.scss ---> div.container {
+                                                                                          background: #F8F8F8;
+                                                                                        }
+                                                                                        the container changes its color. and separation becomes visible.
+                    *********************************************************************************************************************************************************************************************
+
+
+
+                 -----> CHANGE THE TITLE in taskbar..
+                            ---> for the image, besides ttile text in taskbar, we will use favicon, 
+                            ----> to convert any of your file png into favicon.ico , there are various online tools ---> like-->https://convertico.com/ ----> ust upload your png and it gets converted.
+                            ---> add that ico file in public folder.  ----> xyz.ico ----> it get automaticcally to taskbar title. 
+
+
+
+    
+***************************************************************************************************************************************************************************************************************************
+
+        -------> ADDING MENU ITEMS TO THE page.
+                -------> move curser where hero section ends.
+                -------> create another section ----> <section class="menu container mx-auto py-8"> ---> menu , turn it into container,make it center using mx-auto and py-8 gives padding to top and bottom..
+                -----> add small heading to menu section.---. add h1 --->     <h1> All Dishes </h1> ---> to format text add class ----> text-xl, makes text XL ---> font-bold,  make it bold ---> mb-8 , margin bottom  , mx -- adds margin to left and right.
+
+
+                -----> add menu ---> its just a single card repeating again aagain ----> so we will create a card and just  copy paste it.
+                -----> for it we need a wraper ---> after h1 ---> add div --. and inside it another div for card.
+                -----> firstly we will add image in inner divs ----> 
+                                <div>
+
+                                  <div>
+                                         <img src="/img/dish.png" alt="food items">
+
+                                  </div>
+                              </div> 
+                ------> after image ---> we need to add text ----> adding text inside another div.--->add h2 for dish name ---> below it is its details ---> we add span and put deatils of item.
+                ------> adding price and add to cart button ---> as we see one is left and one is right ---> whenever we face such situation ---> use flex ---> for flex firstly we need a wrapper and under that we add flex items.
+
+                -----> inside div we add span for prices ----> and a button ---> sinside button a plus sign using span and txt 'add'.---> here our one card gets completed.
+
+                -----> we can see card on page ----> but it needs a bit of styling.
+                -----> to style image ----> in img tag ---> add class --> h-40 , to fix the height. ---> mb-4, margin bottom ---> mx-auto for center----> mx-10 , horizontal margin.--->  <img class="mx-10 h-40 mb-4 mx-auto" src="/img/dish.png" alt="food items">
+                ------> when we load the page ---. img comes to center---> bcoz our wrapper is div and it is a block element , so it takes whole width, and comes to center as we used mx-auto.
+                ---> We will see how it gets fixed automatically when we add multiple cards to it.
+
+                ----> we style text also.---> in h2 add classs----> mb-4, margin bottom ---> text-lg, increase text size.
+                ---> add style to span ----. add class ---> py-1, vertical padding ---> px-4, horizontal padding --> rounded full , roundsthe corner.---> uppercase , to make it uppercase.-----> text-xs, text extra small ---> to add background of text ----> create custom class size and edit it in app.scss. --> <span class="py-1 px-4 rounded-full uppercase text-xs size">FULL</span>
+                --->  in app.scss ---> mention size class and add css ---> .size{background: $secondary;}; .
+                ----> now we will add style to rs and add item button ---> we will use flex ---. add flex class to wrapper tag ---> add class - items-center ---> add class - justify-around. ---. <div class="flex items-center justify-around">
+                -----> style price ---> add class ---> font-bold, to bold text --> text-lg , increse size.---> <span class="font-bold text-lg"> Rs. 250 </span>. 
+                ----> style button ---> add class --> a custom class - add-to-cart, add custom css to app.scss.  ---> .add-to-cart {border: 2px solid $primary; color: $primary;} ---> given border, color primary.  ----> color,  text color also primary .
+                                 ----> add hover ---> to add to cart class ---> &:hover { background: priamry; border-color: pure; color: pure; }
+                                 -----> to make hover smooth ---> add transition above hover ---> transition : $smooth. ---> now hover transition looks good.
+
+
+                        ----> add more class to style button --> p-1, padding top bottom --->px-6, horizontal padding --> rounded-full , to make corners round -----> add flex class, items-center , font-bold ---> to center + and text inside button.. 
+                        ---> space btw + and text ---. add class ---> ml-4, margin left 4. -----> button is ready now.
+                        ----> to make whole text center ---> to div below img tag ---> add class --> text-center 
+                        ----> div above span price---. add class ---> mt-6, margin top (if needed.)
+                        ----> ONE CARD GET completed.
+
+
+                    ------> add more cards ---> just copy paste existing one card. 
+                                ---> copy div inside wrapper div -----> and paste below it ----> 
+
+                                ----> all cards comes one below another.
+
+                                ----> to make it come in this type of layout.----. one line 4 cards ---> we can use flex for this , but here we will use grid 
+                                            ---> for tailwind grid ---> inside wrapper div(which holds all cards) add class ---> grid, grid property gets added ---> grid-cols-4, for showing 4 colums ---> col-gap-12, for space btw columns -----> row-gap-16, for sace btw rows.--->
+
+                                        ----> HOME PAGE IS READY. -----> testimonials ---> template copy paste  and so is footer section. ---> from tailblocks.
+
+
+
+***********************************************************************************************************************************************************************************************************************************************************
+******************************************************** DO SECOND COMMIT HERE  *************************************************************************************************************************************************************************************
+***********************************************************************************************************************************************************************************************************************************************************8
+
+
+-------> ADD ORDER NOW  BUTTON TO HERO SECTION 
+                ----> IN HOME.EJS -----> HERO SECTION --->add a button tag  after h1(freshness delivered) ---> add text , ORDER now.
+                -----> customise using tailwind css classes ---> px-6, horizontal padding ---> py-2, vertical padding ---> rounded-full, for rounder corners --> text-white, tailwind css class to make text white ----> font-bold, to make font bold ---> mt-4, margin top 4.
+                ----> as we see button need bit more styling to appear correctly and  look goood .
+                -----> give it a custom class ---> btn-primary ---> add class to app.scss ---> .btn-primary{background: $primary;}---->button looks perfect now.
+
+                ----> to add hover effect to button ---> in btn-primary class in app.scss -->  .btn-primary{background: $primary;
+                                                                                                        &:hover{ backgroound: $primary-hover;}
+                                                                                                        }    
+                -----> to make hover effect smooth ---> above &:hover{ } --> add tranition=$smooth ---> done.
+                BUTTON DONE
+
+
+--------> WE NEED TO ADD SEPARATE PAGE FOR CART , so our application will have multiple pages ---> so we will see how to make multiple pages 
+
+                -----> all our pages will be inside views folder---> as cart is related to customers ---> we create customers folder inside views --> and inside it create a file ---> cart.ejs
+                ------> cart.js will contain our cart page code.
+                ------> as for the cart page outr URL will be ---> localhost:3000/cart ----> so we need to create that route  -----> if currently we got to that url we will see ---> cannot GET /cart ----> means express doesnot know where this route is going . 
+
+                -----> TO CREATE THE ROUTE ---> WE GO TO SERVER.js -----
+                        ---> this will also be a get route below get root routes.
+                        ----> app.get("/cart", ) ----> to handle it we need call back (req,res) ----> res.render("customers/cart") ---> as we have to render cart page.----> now go to that url, u will see whatever test code u have written on cart page for testing. --> means our route is working perfectly.
+                        -----> now we will desgin the cart page 
+                                    ----> as we have navbar on cart page as well ----> one thing we can do is to copy navbar code from home page and paste here----> we have multiple pages and every page has navbar ---> so it will add lot of copy paste code to app.---> so we cant do this way.
+
+                                    ---->we have a better solution -----> we have installed a package called expresslayout ---> lets see how will it work.
+                                    ----> EXPRESS_LAYOUTS *************************************
+                                    --------------------------> let us see how express-layouts will help in avaoiding this repetition of code. 
+                                    ---------------------------> inside views folder ----> create a file layout.ejs ----> file name should be this only as our package will look for this file only here. in views folder.
+                                    -----------------------------> all the code repeating in our application we will keep it here in layout.ejs.
+                                    -------------------------------> copy paste whole code from home.ejs to layout.ejs and keep that code only  which is going to repeat on every page of application. and delete the rest. 
+
+                                    ---------------------------------> now go to home page and do reverse step ---> keep only those things we deleted from layout.ejs ----> coz rest all code we wwill get from layout.ejs file.
+                                    ---------------------------------> so our home.ejs will now have only two sections ----> hero and menu , rest all will come from layout.ejs. 
+                                    --------------------------------> now when we got to homepage on server ----> we neither see navbar , nor css is applied. ----> means our layout is not working properly.
+                                    -------------------------------> to make layout.ejs understand and do things perperly ---->  goto to layout file and where page specific content, that is different for each page ,   needs to be added ----> add  ---> <%- body %> ---> means layout will remain same on each page and our unique content which is page specific gets injected here. 
+                                    -----------------------------> save it and see the bowser. ----> till now our layout is not working.
+                                                        ----------> REASON : //template engine  comment section in server .js ---> which is placed after the routes ---> should be placed before them.
+                                                            -------> So make sure , all the routes should be after this block of code only. not before them.
+                                                            -------> do this and every thin workss perfectly fine. even the cart page has the navbar ----> now only page specific content needs to be added.
+
+                                    ------>  CREATING CART.js CONTENT --> adding only page specific content and rest repeating content will be taken from layout.ejs. 
+                                                ----> in cart page --. lets first create a section ---> add custom class , empty-cart .
+                                                -----> inside section ---> add a div container ----> div with class --> container , mx-auto text-center.
+                                                ---> inside it ---> create a h1 for main text of page ---> and add styling ---> add classes --> text-3xl , font-bold , mb-2 
+                                                ----> add p tag below it ---> 
+                                                ---> add img tag below it ----> "/img/empty-cart.png" --->
+                                                ----> add button ----. we can also add anchor tag here  ----> we are going with anchor tag ---> add href to "/" =----> to make it look button type add classes ---> as anchor tag is inline but if we want to give vertical padding to it  and make it button type. ----> convert it into inline-block 
+                                                ---. also add classes ---> px-6 py-2 roundedifull btn-primary(custom craeted class for button , created previously.) text-white font-bold mt-12 
+                                                ---. save and see in browser now. ---> decrease size of image ---> class= w-2/5  .
+
+
+                                                ---->  CART ---> empty page code and item added page will switched dynamically by show/hide.
+
+                                                -----> just commenting the code of empty cart, and writing code of item added cart. (Later we will switch these to contents of same page dynamically using show / hide.)
+
+
+                                                --->  under section add div with class --> order ---> it will be a container ---> mx-auto , to make it center  ...> it is our wrapper.
+                                                ---> add a div inside it , to add img and text. --> here we will use flex, that why above we created a wrapper which is essential for flex.
+                                                ---> add img tag ---> add img --> "/img/cart-black.png" --> and a h1 ----> <h1> ORDER SUMMARY </h1>...
+                                                ---. as we see in browser img and text are coming one below other ----> to make it come in same line ---> in inside div add clas --> flex , items-center ----> they both come in same line.
+                                                ---> lets style the text a bit --> add class ---> font-bold, ml-4, text-2xl.
+                                                --->add border below it ----> got to wrapper div --> add clas --> border-b, border bottom ---. border-gray-300 ---. pb-4, padding bottom. 
+
+                                                ---> all content should come in center of block  ---> go to block div above wrapper ---> in class add ---> w-1/2, width we are making 1/2 or 50% . 
+                                                ---> adding list of items ---> create another wrapper div inside block div only ---. <div> </div> ---. add custom class --> dish-list ...
+
+                                                ---> create div inside this wrapper --> add img --> right now we are just adding static img  , later it will come from database . ---> "/img/dish.png"
+                                                ---. create another div for its name ----> div ---. add h1 --> Kadhai Paneer  ---. create span ---> FULL.
+                                                ---> after this inner dic ---> create a span for qty  and another span for price ----> later this data will come from database. so later we will make it dynamic.
+
+                                                ---> save and open browser ---> we will see items are not structured properly ---> since we have to bring everything in one line , we will use flex ---> On the parent  we write flex class 
+
+                                                ---> div after dish list text is parent ---> add class --> flex items-center. and make img tag below it --> img a bit smaller ---> add class --> w-24, it becomes small.
+                                                ---> div below it ---> we add margin  ---> ml-4 ...
+
+                                                ---> gty and cost is still glued --> we want the mfar separatted. 
+
+                                                ---. in span price add class ----. font-bold, for bolding it ---> text-lg , to increase size. 
+                                                --->we need to "grow" items details and qnty ----> add class ---> flex-1 to div details --. flex-1, to span qnty
+                                                                ----> GROW --> it takes ehatever the space is available. 
+
+                                                ---> copy paste ---> increase item list.---. from div below items list. 
+
+                                                --- > we added 3 items ---> 3 times copy paste. 
+
+                                                ---> my-8 add to each, looks good now ...
+                                                --> adding a border below also ---> where pizza list div ends --> add hr. 
+
+
+                                                ---> to show total amount, address, and order now button  ----> craete another div below hr ---> and another div inside it for total amount.
+                                                ---> as we want color of total amount and price to be different we create two spans. --->  add total amount in one and rs in another 
+
+                                                ---> as it is aligned right ---> in the parent div of spans ---> class --> text-right. and a bit padding py-4
+
+                                                ---. let them style a bit ---. added classes in both spans to stle.
+
+                                                --. add a custom class to price ---. here class="amount " --. we will stye it in app.scss 
+                                                ---> in app.scss ---. inside sction.cart{ } ---> add amount class ---> add color priamry 
+
+
+                                                ---> We wwill make form for address and phone number  --->
+
+                                                ---> add another div below spans div ---. and add form tag --->
+                                                ---> as we add input , input , and a button ---> we can see button comes in same line as address input ...
+                                                ---> make it under div as div is block element ---> so it will come to next line. 
+
+                                                ---. style button ----> added styling classes. 
+
+                                                ---> we need to add another button ---. for if the user is not login , then in place of order now we will see Login botton.
+
+                                                ---> So after form div ---> addded an anchor tag ----. < a href="" >LOGIN TO CONTINUE. </a> ---. bydeault its inline ---. add class inline-block --> curser-pointer --. px-6.
+
+                                                ---> we will either show this button or order now button. ---. to see comment out first button and see this ----> we will dynamically change the button later .
+
+                                                keep order now for now ,,, login to continue button is commented. as of now 
+
+                                                ----> SO HERE OUR CART PAGE ENDS -----
+
+
+                                                *******************************************************CART PAGE ENDS --------------------------------------------
+
+
+--------------------------> CREATING LOGIN/REGISTER PAGE  ------------------------------
+
+                                    ----> inside views ----> make a folder auth ---> create a file ---> login.ejs  and another file ---> register.ejs
+                                    ---> currently if we got to login page url ---> it will show CANNOT GET/login ---> means route is not defined.
+
+                                    --> we will define login route and register route ---. in server.js ---> save file and open browser ---. we see navbar and footer etx from layout.ejs ...
+
+                                    --> means routes created suucessfully. 
+
+                                    ---> activating login and register links from navbar by giving url ---> in layout.ejs ---> NAV links login and rester started working, 
+
+                                    --------------> DESIGN LOGIN.ejs -----------------------------------------------------------
+                                                    -----> craete section ---. with class ---. login 
+                                                                -----> inside this we will crerate form login. ---. we will get this login template ---> from tailwinds website --. components ---. examples ----> forms ---> copy paste the free template snippet.
+
+                                    --------------> DESIGNING REGISTER PAGE ------------------------------------------------------
+
+                                                    --------> copy content of login.ejs to register.ejs. ----> just add a new input or change existing ----> name , email, password 
+                                                    ---> add href links to ---. already have acc ---. dont have account .... it switches btw login and register page. 
+
+                                                    LOGIN AND REGISTER PAGE GETS COMPLETED
+
+
+
+*************************************************************************************************************************************************************************************************************
+******************************************************************************* COMMIT HERE ---- FRONT END OVER  ***************************************************************************************************************************
+************************************************************************************************************************************************************************************************************************
+
+------------> MOVING ROUTES To ROUTE FOLDER ---> 
+                                        ----> we have two folders inside routes folder ----> api.js and web.js 
+                                        ---> we will keep all our routes inside web.js -----> and app.js to store api , if we create that in ahead. ---> currently our routes will be in web.js.
+
+                                        ---->in web.js ---> create a function ---> any name ---> we create initRoutes() { } ---> all our routes will be inside this function.
+
+                                        ----> firstly lets cut paste root route to web.js inside function. ---> as we know app is an instance of express and how will we get express app inside web.js. 
+
+                                        ---> lets pass app as parameter to function ---> and recieve app . ----> but how will app be available here in web.js ----> so we export this module ...
+
+                                        ----> module.exports = initRoutes 
+
+                                        ----> we go to server.js ----> from where we cutted the root route ---> import our web file here ---> require("./routes/web") 
+
+                                        NOTE : "./" means root directory ---> "./routes/web"   -> no need to write web.js full, js is automatic.
+
+                                
+
+                                        ----> module.export will export a function , and require will also be a function to catch exported function ----> so after requir("./routes/web") ---> add () to make it function.---> so it becomes function call. of initRoutes() ---> in arguments add (app) to pass it as parameter in web.js.
+
+
+                                        ---> add all routes to web.js function ---> like root route ...
+
+                                        ---> now see on browser --->run mpx mix and node server.js --->  routes working perfectly.
+
+
+    -----------------------------> CONNECTING CONTROLLERS TO ROUTES ------------------------------------
+                                           WHY ?? ----> we have wriiten all the get routes ---->consider ex of register route ---> currently with app.get we are rendering rejister.js ---> this is get request . 
+                                                    --> but when we will implement resiter logic , we will have another route ----> app.post()---> here we will write whole logic ---> so file size will get increse coz of code , also since its a route file , we should not write logics here. ----> So we move logic inside controllers ---. so that route file remains clean and small. 
+                                                    ----> logic of app.get() will also be shifted to controller , as routes file will have only routes , no logic 
+                                                    ---> in app foldder , go to http and then select controllers ---> inside this we will create our controllers.
+
+                                                    ----> create a new file ---. homeController.js ---> we will create function here also , like we created in web.js. 
+
+
+                                                    --->  function ----. anyname ---> so we name it --> homeController() {} ---> consider this function as a FACTORY FUNCTION .
+                                                    ----> FACTORY FUNCTION ----> simple function that return an object. 
+
+                                                    ---> so it will return an object ---> return { } ...
+                                                    ----> as we know this homecontroller is for home route app.get("/") --> 
+                                                    ---> since we are just reading page , we can use index method ---. index(){ }--> inside return { } that will have logic of app.get("/")
+                                                    ---> inside it paste res.render("home")...
+                                                    --->  res.render("home"); ---> but from where we will get res here ---> in routes it was coming from (res,req)...
+                                                    ---> lets focus on app.get("/", (req,res)=>{}) --->  here app instance is calling a function get with two arguments , (path and a anonymous function) .     
+                                                    ---->if we remove that anonymous function and then we are left with only one paramenter ---> second wala parameter --. anonymous function  ---> iske andar humko recieve hojata hai --> req and res . 
+                                                    ----> so now we export homeController ---we are exporting a function ---. when we will call it --. it will return us object in return section..
+                                                    --->this function call will be created inside web.js --. in web.js --> require ("../") here ../ moves one directory back, so we come to root directory. -----> require("../app/http/controllers/homeController") ---> sd it is returning , we will stiore it in variable ---> homeController.js
+                                                    --->home const homeController will get homeController() of web.js, so have to call it. ----- using this const homeCOntroller  inside initRoutes Function. 
+
+                                                    ---> as we call we get an object from return ---> and this object has a method inside it --> index() ---> homeController().index  ----> and put this homeController().index in place of anonymous function pareamenter of get method . ----> as we know anonymous function we pass , on it we recieve res,req --> so this function will also recieve req,res ----> this function is index() --> so it wil be index(req,res) . 
+                                                    ---. NOW WE CAN USE res in res.render here in controller. 
+                                                    ---> as we see in browser root route is working perfectly. so controller connection is perfect for home route. 
+
+
+                                                    ---> Doing the same for all routes, creating controllers for them also .... 
+
+                                                    ---> CREATE CONTROLLER FOR LOGIN AND REGISTER ROUTES ... 
+                                                                -> inside controller , create a new file , authController.js ---> for auth related logic 
+                                                                ---> so same process as above. 
+                                                                for each routes.
+
+                                                                ---. as in home route index was only method of returned object ---> here it wil be 2 ---> login{}, and register{} , there will be a comma as they are methods of object. 
+                                                                ---> save and check , connection to controllers is perrfect ofr not. ----DONE 
+
+                                                    --->  CREATING CONTROLLER FOR CART ROUTE AS WELL ... 
+                                                                ---> create another folder inside controller ---> customers for customer specific routes and in future we will also add another folder for admin as well. 
+                                                                ---> inside customers ---. cartController.js --> for all cart logics --->  Do same ---> check in browser. --> DONE .      
+                                                    ----> ROUTES AND CONTROLLERS CREATED SUCCESSFULLY -------------------------------------
+
+
+*********************************************CREATING ADD TO CART FUNCTIONALITY ******************************************************************
+
+                                    ------> AS WE know , aur menu items on homepage are static and hardcoded. ----> we have to fetch them from database . 
+
+                                ------------> FETCHING MENU ITEMS of HOMEPAGE FROM DATBASE ********************************************************************34:13 V6 
+
+                                                    ---> if we want to fetch from DB , so we need a database. 
+                                                    ----> CREATING A DATABASE ____________________________________________________
+                                                    ---------> we will use MongoDB for Database. 
+                                                    ----------> we will use COMPASS  ---> GUI for MongoDB 
+                                                        -------> create a cluster using ATLAS ---. connect---> copy that connection string to compass and press connect.
+                                                        --------> create Database ---> Database name --> items ---. collection name --> menu 
+                                                        ----> insert all menu items here in menu collection(collection === table).
+                                                        ----. methods to insert menu items to collection --> 1> create admin panel ---> 2> manually import data from a json file. 
+                                                        ----> we choose second ---> manually we will import data -----> we have already created data , in menu.json file 
+                                                        ---. we will import that json file in compass.---> we have data now.
+                                                        ---> now we have to fetch this data to homepage and display it.  
+                                                        ----> firstly we have to give database connection to our application. 
+                                                        ---> we need a package called Mongoose. ---> istall mongoose with npm --> npm i mongoose ---> in the same project directory. 
+                                                        ---> mongoose makes our interaction with mongoDB easier.
+                                                        --->now we do database connection ---> go to server.js ---> import mongoose. ---> const mongoose = require("mongoose");  --> 
+
+                                                        ---. NOW WE WILL DO DATABASE CONNECTION ____________________________________________________
+                                                        -----> in server.js ---> above //Assets ---> add //Database Connection ---> we use a copy paste code, we can save it bcz everytime a databse connection is setup it is same ---.>
+                                                        ---> ______________________________________________ 
+                                                        Database Coonection Snippet ....JUST COPY PASTE everywhere.
+
+                                                        const url = "mongodb://localhost/items";
+                                                        mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: true });
+                                                        const connection = mongoose.connection;
+                                                        connection.once('open', () => {
+                                                            console.log("Database Connected...");
+                                                        }).catch(err => {
+                                                            console.log("Connection Failed...")
+                                                        });
+
+
+                                                        --------------------------------------------------
+
+                                                        -----> if u r using cloud database ---> provide that string here, but we are using local mongodb---> so we added localhost---> then databse name ---.we have created items dtabase here  ...
+                                                        ---> nect line we are using mongoose object and calling connect function on it. and we pass two parameters to it. (url,an object) ---> url we mentioned abv and object is the configuration for our mongodb.
+                                                        ---> next line we store our connection in a variable , so that we can use this onnection later. 
+                                                        ---> on connection we calling method once , its type of event ---.open, first parameter is an event gets called if databse connection is done., second parameter is a callback called if its connected. ----> we console log --. connected. ..., if any error we also log it using catch.
+                                                        ---> check on command line if databse is connecting or not, run the  server. 
+                                                        ---> note mongodb should be installed prior to it. else will show error.
+
+                                                        ----> COnnection Successful.
+
+
+                                                        ---> when we are working with mongoose -----> it has models ---> with help of these models we can perform databse query.
+                                                        ----> So to fetch menu items , we need to create a model,  app>>models>> all models will come here ----> create a file menu.js ...
+                                                        ---> this will be our menu model, 
+                                                        ----> model represent table inside database. 
+                                                        ---> it is to remember ---> if model we create is menu ---> table inside databse will be names its plural ---> menus 
+                                                        ----> REMEMBER - MODEL IS SINGULAR AND TABLE IS PLURAL , IN MONGODB TABLES ARE CALLED COLLECTIONS . 
+                                                        ---> 
+                                                        ----> in menu.js ---> import mongoose ---> we need a constructur function inside mongoose ---> const Schema = mongoose.Schema; 
+                                                        ---> THERE IS A NAMING CONVENTION IN JS ---. IF 1ST LETTER OF VARIABLE IS CAPITAL , MEANS ITS GOING TO STORE A CLASS OR A CONSTRUCTUR 
+                                                        ----> CALL CONSTRUCTOR FUNCTION     ------> AND PASS AN OBJECT INSIDE ----> IT WILL CONTAIN OUR ALL STRUTURE ---> LIST COLUMS WE REQUIRE OR PROPERTY WE REQUIRE IN THAT DOCUMENT.
+                                                        ---> id : no need to write its automatically inserted.
+                                                        ---> we need name ,image pprice size, ----> and give its details some. ---> name : {type:string, required: true} ---> likewise do for all. 
+                                                        ---> REMENBER =----> DONT ADD RAW DATA TO DB --->FOR IMAGE ---> WE CANT STORE RAW IMAGE OR DATA. 
+
+                                                        ---> for imagee---. we need to upload it first ---> store ---> and then its url /path is stored in database. 
+
+                                                        ---> store that schema inside a variable ---. menuSchema
+
+                                                        ---> so this is our schema ---> or skeleton we can say --. or blueprint of table inside database.
+
+                                                        ---. now we create a model, from this blueprint---. 
+
+                                                        ---> const Menu = mongoose.model("model ka naam kya reakhna hai" ---> this name is imp cz when mongoose create collection in DB it will check for this name and collection name will be plural of model name , kaunsa schema humko use karna hai  ) 
+
+                                                        --->  const Menu = mongoose.model ("Menu", menuSchema);
+
+                                                        ---> export it. module.export = Menu ;
+
+                                                        ---> As we want to fetch all items on homepage ---> we need to find out which controller is responsible for out homepage. ---> we remember its homeController ...
+
+                                                        ---> in homeController ---> import Menu Model --> const Menu = require("../../models/menu").
+
+                                                        ---> inside index function ---> write code before return ---> Menu.find() ----> if we want all records from databse ---> we call find method. 
+                                                        -->Menu.find().then ---> inside then pass a function , which executes when our data gets recieved. ---> and inside funcxction argument ,  we get whole data ---> write any name of argument.---> function(items) 
+
+                                                        --> in render function , first arg--> home , second arg --> { key: value} ---> {items : items--> array of objects }
+
+                                                        ---> it will get executed when we hit the homepage.
+                                                        --> when we hit homepage ---> console gets the data. 
+
+                                                        -----> BUT THERE IS BETTER PROCESS TO FETCH THIS DATA -----> ASYNC AND AWAIT -----> 
+                                                    NOTE  -----> CONNECTION URL in SERVER.JS ---> atlas wala use karna hai .....
+                                                                            below is the SNIPPET TO CONNECTION DATABASE: above database connection snippet dont wwork -----> 
+                                                                           
+                                                                            const mongoose = require("mongoose");
+
+                                                                            //Database Connection
+                                                                            const url = "mongodb+srv://xyz:xyz@cluster0.odtx5.mongodb.net/item?retryWrites=true&w=majority"
+                                                                            mongoose.connect(url, {
+                                                                                    useNewUrlParser: true,
+                                                                                    useCreateIndex: true,
+                                                                                    useUnifiedTopology: true,
+                                                                                    useFindAndModify: true,
+
+                                                                                },
+                                                                                console.log('Database connected...')
+                                                                            );
+
+                                                        -------------------->   
+
+                                                        -----> database fetched succesffully on console.
+                                                        ---> now we will make homepage dynamic ----> go to views ---> home.ejs 
+                                                        ---> we can see our full data is hard coded ---> so we will delete all items from menu just keep first one.
+                                                        ---> we have jus tleft one item in homepage , delete rest 
+                                                        ---> as we know --> we are recieving array of objects from backend --> so we can loop and repeat this one block 
+                                                        ---> so we will repeat , and make data inside it dynamic. 
+
+                                                        ----> block to be repeatred ke divs ke upar ----> write ejs --> type name of array ---> menus --. apply foreach loop to it .  
+                                                        ----> make name , image , size, price dynamic by using ejs tags , and array of object coming from homecontroller.
+                                                        -----> refresh the page , now we have dynamic menu on our webpage, coming from database. 
+
+
+                                        *********************************************************FETCH ALL PIZZAS FROM DB AND SHOW ON HOMEPAGE DONE **********************************
+*                                       **********************************************************************************************************************************************
+
+                                        -----------------> ADD TO CART FUNCTIONALITY -----CONTD.-------------------------
+                                                -----> we have various options to store cart ---> store in browser's local storage --> cookies ke anadr store kar sakte hain ---.> database ke andr bhi store kar sakte hain .-----> redis ke andr store kar sakte hain ---> sessions ke andr store kar sakte hain . ...
+
+                                           *         ----> WE WILL BE STORING CART IN SESSIONS -------------------------------------------------------------
+                                                    ---> NOW, IF WE WANT TO USE SESSIONS IN EXPRESS     , WE NEED PACKAGE -----> express-session . ---> npm i express-session ---> 
+                                                    ----> go to server.js ---> we need to do some setup for sessions here. 
+
+                                                    ---> require the package we just installed. ---. below mongoose -----> so session configuration below the database connection 
+
+                                                    ----> session library works as middleware ---> to use any middleware of express ---> app.use ---> app.use(session({})) ---> inside it we pass an object. 
+                                                    ----> SESSION CONFIG 
+
+                                                    app.use(session({
+                                                         secret: ""
+                                                     }))
+
+                                                     ----> secret: ---> it is required for cookies ---> to encrypt our cookies ---> WHY COOKIES, ITS SESSION CONFIG ??? ----> cz session dont work without cookies. -----> session ko kaam karne ke liye cookies chahiye.
+                                                     ---> cookies ko humko karna padta hai encrypt --> for this encryption we need secret key. 
+                                                     ---> for secret we can provide any string ---> but if its secret be it passwords,secret keys, api keys , ---> we should never store it in such codes.
+                                                     ---> for these what normally we do, we create a file ----> env file or environment file --> all variables are stored inside this file . 
+                                                     ----> this storage happens inside node process ---> application ke baahr ---> but application ke andr uska access hota nad we can get it . 
+                                                     ---> so we should never write it in our code. 
+
+                                                     ---> for this we need to install a package called ---> .env ---> npm i dotenv ---> installed package . 
+                                                     ---> go to root folder ----> create afile --> .env ---> name mus t be same as this ----> all secrets will be stored in this file . 
+
+                                                     ---. create cookie_secret = give any string ---. we gave ---> idonthavesecrets ...
+                                                     ---> close the env file ----> go to server.js 
+                                                     ----> if we want acess of .env file inside our application ---> we need to import a module ---> in the top of server.js ---> on 1st line ---> require("dotenv") ---> and we need to call a method on it ---> require("dotenv").config() . 
+                                                     ---> after this import ---> all the variables inside .env file ---> can be accessed here . 
+                                                     ---> in //session configuration  part ---> secret : process.env.COOKIE_SECRET ---> as to access content of env file ---> we need to get by --> process.env --> and then variable name 
+                                                     ---> the string value of COOKIE_sECRET will be stored here . 
+                                                     ---> add more code to it ...
+                                                     secret : process.env.COOKIE_SECRET
+                                                     resave: false,
+                                                     saveUninitialized: false, 
+                                                     cookies: {maxAge:1000*60*60*24} ---> here we have mentioned life of cookie ---> kitne time tak valid rehni chahiye ---> maxAge property accepts time in milliseconds --> it sums up to 24 hours ---> therefore our session cookie will remain valid for 24 hrs. 
+
+
+                                                        ----------------------SESSION CONFIG GETS COMPLETED HERE --------------------------------------
+                                                     ---------> HOW SESSIONS WORK and HOW COOKIES HELP SESSIONS ? 
+                                                                ---> our system ---> sends http request to server----> server gives the response to our system . 
+                                                                ----> soppose we send a http req to server(our first req)---> if this is our first req , then server generates a unique id for that client  called session ID ---> session id is saved as key value pair ---> value is unique to each client.
+                                                                ---> this session id has to be stored and server has various option to store it ---> 1) Memory, not feasible as expensive, volatile , 2) files 3) redis 4) Database 
+                                                                ---> for this project , we store it in database. 
+                                                                ----> so server stores session id in database ---> response has headers in it ----> inside headers server will send a mesg to client ---> un msg mei server bolega ki --> ye session id hai isko lelo, and clent pe ek cookie create karo and usme isko store karo . 
+                                                                ---> so now  when next req comes ---> that cookie is sent along with it inside req headers ---> when server recieves cookie , it understands who is client . 
+                                                                ---.> so this is whole working ...
+
+                                                                ---> to test it ---. we need another package -=-> npm i express-flash . 
+                                                                ---. now we have too initialse it ---> in server.js ---> and then we have to use it as middlewares ----> app.use(flash()); 000. below session config. 
+                                                                ----> save and move to bowser ---> right click --> inspect ---> application tab ---> on left side there is cookie option , currently we dont have any . 
+                                                                ---> go to network ---> clear all ---> the reload and send 1st request ---> in the list open localhost, it is the req  . 
+                                                                ---> in every req  ---. there are 2 things ---. response headers and request headers ---. serach for any cookie header in req headers ---> no cookie header ---> coz we dont have cookie yet ---> in response headers we se a msg ---> set cookie ---. with name and value 
+                                                                ---> so browser sets a cookie --> named connect.sid  ---> now broser sends this cookie along with requests ...
+                                                                ---> now if send another request ,,,this time req header will have a cookie send along with http req. ---> 
+                                                                ----> it will keep sending this cookie till it is valid or not expires. ---. maxAge
+
+                                                                ---> pehli req ke baad --. res header mei humare pass set cookie that , ki isko set kardo ---> next request mei rq header mei cookie gyi ,abko response header mei cookie set cookie nahiaayi . ---> it wont send set cookie in response , till int is live . 
+                                                                
+
+                                                                ----> currently we arestoring cookie in memory ---> but we want to store sessions in databse ---> by default it is stored in memory . 
+                                                                ---> to store sessions in db , we need a oackage called ---> connect mongo ----> npm i connect-mongo 
+
+
+                                                                ----> import it in server.js ---> const MongoDbStore = require("connect-mongo"); ---> we will recieve a function ---> and session variable is passed inside it. ----> const MongoDbStore = require("connect-mongo")(session) 
+                                                                    DONT's USE ABOVE IMPORT -----> use this     ------> const MongoDbStore = require("connect-mongo").default;
+
+
+                                                                ---> setup //session store ---->  above session congif ---> 
+
+                                                               // Session Store
+                                                                                let mongoStore = MongoDbStore.create({
+                                                                                    mongoUrl: url,
+                                                                                    collectionName: "sessions",
+                                                                                });
+
+                                                                ---> now , humare db ke andr aur ek collection / table create hojayega --->  sessions naam ka. 
+
+                                                                ---> uske andr sessions store hojayenge . 
+                                                                ---> now this variable mongoDbStore will be added in session congig partafter resave, 
+
+                                                                ---> store : mongoStore, 
+
+                                                                ---> full ----> // Session configuration -----> 
+
+                                                                app.use(
+                                                                            session({
+                                                                                secret: process.env.COOKIE_SECRET,
+                                                                                resave: false,
+                                                                                saveUninitialized: false,
+                                                                                store: mongoStore,
+                                                                                cookie: { maxAge: 1000 * 60 * 60 * 24 }, //cookie valid for 24 hours
+                                                                            })
+                                                                        );
+
+
+
+                                                                --> our all sessions will be store in this mongoStore. 
+                                                                
+                                                                ---> run server. and check
+                            ------> SESSIONS COLLECTION  CREATED IN DATABASE ----------------------------------------------------------
+                                                                --->  now when we refresh page , it will be our 1st request -----> it will create a session and store in db 
+                                                                ----> when session expires , it get s automatically deleted in databse also. 
+                                                                ---> 
+
+
+---> As session collection is  created.  v6 , 1:36
+-----------------------------------------------> ADD CART TO SESSION FUNCTIONALITY  -------------> 
+                                                        ----> we will add event listener on add button coz when we click on add on the homepage below the dishes , then it proceeds further.. 
+                                                        ---> as this is full client side code ---> go to -- resources ---> js --> app.js ...
+                                                        ----> till now we haven't wriiten any client side code , we will write it now  . 
+                                                        ---> open our home.ejs also----> go to button tag ---> it has class = "add-to-cart" we will use it  ---> and saaare buttons pe event listener use karna hai.
+                                                        
+                                                        ----> in app.js ---> we will get button nows ----> let addToCart = document.querySelectorAll(".add-to-cart") ----> here addToCart variable will be array type ---> saare buttons as a array yahan pe aajayenge . 
+                                                        ----> toh iske upar humlog loop kar sakte hain ---->
+
+                                                        addToCart.forEach((btn) => {                                    -----> yahan function pe har ek iteration mei hume button --> btn recieve hojayega 
+                                                                        btn.addEventListener('click', (e) => {          -----> then iss btn pe hume eventlistener add karna hai  ---> we will use click eventlistener ---> and second parameter should be a callback --> iske andr humko event recieve ho jaati hai 
+                                                                                                                        
+                                                                        
+                                                                            let dish = JSON.parse(btn.dataset.dish)      ----> 
+                                                                            updateCart(dish)
+                                                                    
+                                                                        })
+                                                                    })                                                                      
+
+                                                        -----> our this client side file automatically compile hokar ---> public folder ke andr jaarhi hai ----> coz we are using laravel mix web pack . 
+                                                        --->  now , is button (add) --> ke click hone ke baad hume kuch toh essa karna hoga ----> ki ye jo humari dishes hain aajaye iss file ke andr ---> e . 
+                                                        ---> we will send req to server ---> and jo sishes hain unko add karayenge cart ke andr or session ke andr . 
+                                                        ---> ye humko kahan se milega ---> dish jispe click horha hai ---> go to home.ejs ---> and inside button tag we will use data attribute ---> give any name --. we are giving it name dish  . 
+                                                        ----> iske andr hum store karenge ---> current dish jo humne loop kiya hai forEach loop pe . 
+                                                        ---> ye jo data attribute hai ---> data-dish ----> hum humare client ke andr get kar sakte hain  . 
+
+                                                        ---> data-dish = "dish" -----> this is a object ---> and object cant be bind like this . 
+                                                        ---> we have to convert it into string ---> to convert object to string ---> we have to convert it into JSON string ---> and again inside client ----> we will again convert it from JSON  to Object . 
+                                                        ---->  <button data-dish="<%= JSON.stringify(dish) %>" ----> here , jo hamara current dish hai ---> yaha pe JSON mei covert hojayega . ---> string ban jayegi . 
+                                                        ---> we wwill get it now inside app.js ---> 
+
+                                                        addToCart.forEach((btn) => {
+                                                                        btn.addEventListener('click', (e) => {
+                                                                        
+                                                                        
+                                                                            let dish = JSON.parse(btn.dataset.dish)                 ---> create a variable--->  dish ---> yah pe hume button mil rha hai jispe click horha hai ---> and uske upar hume kise call karna hai ?? ---> data-dish jo atribute hai uski value hume get karni hai ---> let dish =  btn.dataset.dish  ---> we will get JSON STRING -----> now we have to convert it again into object ---> humko JSON.stringify  jo object ko string banata hai , uska ulta karna padega ----> JSON.parse(btn.dataset.dish) . ---. Jo bhi JSON string hai , weill get converted to object .  
+                                                                            updateCart(dish)
+
+                                                                        })
+                                                                    })     
+
+
+                                                        ------>   as we see in browser, we recieve the dta ---. as object . 
+
+                                                        ---> toh yaha pe hum ek method call ek method call krte hain ---> updateCart ---> click hone ke baad humko humara cart update karna hai . 
+
+                                                        ---> updateCart ke andr pass karenge jo bhi dish , humko cart mei add karni hai --->   updateCart(dish) 
+                                                        ----> abhi ye function kaha pe hai  ---> ye abhi kahin nahi hai we will have to create it ---> 
+
+                                                        function updateCart(dish) {                                                 ----> iske andr jo hum function call mei dish pass akr rahe hain recieve hojayegi . 
+
+                                                                            axios.post('/update-cart', dish).then(res => {          ----> here we will send req to server ----> aur ye jo dish hai jispe click hua hai hume add karna hai cart ke andr ----> yahan pe hum ajax call akrne waale hain ---> ajax call krne ke liye we can use fetch api of js , but here we are using a librabry . which is always used in production side in commercial websites . ---> it is AXIOS 
+                                                                                                                                    ----> AXIOS IS VERY POWERFUL LIBRARY ---. WE WILL HAVE INSTALL IT --->  npm i axios ---> now we will have to import it in app.js --. at the top ---> import axios from 'axios' ---> this library will be imported here ---> it is being imported from inside node modules folder  ---> and we will call it inside updateCart function .  
+                                                                                                                                    ---> inside function , we will be sending a post request ,as we have to send data ---> axios.post('/update-cart') --> is tarah ka url humare pass nahin hai , koi bhi API nahi hai ----> this url we will just create now . ----> and iska jo second parameter hota hai , jo data humko bhejna hai , jis dish pe click hua hai ---> axios.post('/update-cart', dish) ---> agar ye request success hoti hai , then it will come in then block , it will be a function ---> .then(res =>{ } ) 
+                                                                                                                                         axios.post('/update-cart', dish).then(res => {
+                                                                                                                                         console.log(res);
+                                                                                                                                         cartCounter.innerText = res.data.totalQty
+
+
+                                                                                console.log(res);                                   --->  currently this console.log will show earror , cz we have not defiened the update-cart route . 
+                                                                                cartCounter.innerText = res.data.totalQty
+
+                                                                            })
+
+                                                                        }  
+
+
+                                                        --->  CREATE UPDATE-CART ROUTE ------------------------------------
+                                                                        ---> go to routes ---. web.js ---> it will be a post reequest ---> app.post("/update-cart", cartController().update) ---> we will keep it inside cart controller , as it is related to cart . --> on it just write the method name as previously done with other routes .  --> .update . 
+                                                                        ---> this mwthod automatically gets called . 
+                                                                        ---> go to cart controller ---> define update function below index 
+                                                                        ---> update(req, res) {} ---> logic for adding dish into cart , will come here . 
+                                                                        ---> we will store data inside cart like this ----> 
+                                                                        ----> JUST FOR REFERENCE ----> 
+
+                                                                        let cart = {
+                                                                            items : {
+                                                                                dishId: { item: dishObject, qty: 0},
+                                                                            },
+
+                                                                            totalQty: 0,
+                                                                            totalPrice: 0
+                                                                        }                              
+
+
+                                                                        ---> this is the format we require , is tarah se hum hamara cart store krne waale hain . 
+
+                                                                        ----> yaha pe simply ek object humlog store krne waale hain ---> let cart = { } ---> jiske andr key hogi and it will also be an object --->    item : { } ---> its key will be our dish id , item: kaun sa pizza hai , qty : uski quantity kitni hai 
+
+                                                                        ---> ek baar button press karenge to qty 1 hogi ---> second baar press karenge toh jo aur bhi items hain hume add nahi kare, but qty ko increase karna hai . 
+
+                                                                        ---> har ek request pe hume isko track kar ke rakhna hai --> and update karna hai . 
+
+                                                                        ---> kuch iss tarah ka structure hume apne session ke andr store karna hai , Comment it , its just for refernce . 
+
+                                                                        ----> sabse pehle humko check karna hai ki humare session ke andr ye cart already hai ki nahi ---> agar hum pehli baar kuch add kar rahe to session ke andr cart nahi hoga . 
+
+                                                                        ---> if cart is not present in session ---> create an empty cart . 
+
+                                                                        --->  if (!req.session.cart) ---> if session ke andr humara cart nahi hai ---> we create it --->  req.session.cart ---> iss naam ka variable create karo --> and iske andr we have to store an object . ---> vo same ref wala cart object jaisa hi hai .   
+
+                                                                        ---> 
+                                                                        req.session.cart = {
+
+                                                                                items: {},
+                                                                                totalQty: 0,
+                                                                                totalPrice: 0
+                                                                            }
+
+
+                                                                        ----> sabse pehli req aayegi toh if mei check hogi , agar session ke anadr cart nahi hai , toh iss type ka structure session ke andr create hoga ---> and isko ek variable mei store kr dete hain---> let cart = req.session.cart  
+
+
+                                                                        ---> abhi kya karna hai ki ---> jo item hum add akrna chahte hain cart ke andr ---> vo humko check karna hai ki cart mei hai ya nahin ---> agar hai toh simply uska qty badhani hai  ---> aur nahi hai toh vo item humko add karna hoga ---> items object ke andr ---> as store in ref code . 
+
+                                                                        --->  if (!cart.items[req.body._id]) {} ---> jo dish humlog pass kar rahe hain function ko ---> iss dish ke andr id hai , so we will take it using req.body 
+
+                                                                        ----> is we check browser , we will get undefined in console cz ---> our req is json data ---> json data jo humlog bhej rahe hain . ---> lekin humare server ko ye pata nahin hain ---> express ke andr json data ko recieve karne ka feature nahi hai by default ---> isko humein enable krna padta hai ---> go to server.js ---> below --> express.static('public') ---> write --> app.use (express.json())  .   
+
+                                                                        ---> if id nahi hai ---. toh humko add karna hai ---> cart.items.[req.body6._id] 
+                                                                         cart.items[req.body._id] = {
+                                                                                                        item: req.body,  ---> jo dish hai 
+                                                                                                             qty: 1         ---> cart ke andr ye dish nahi hai , toh hum isko add akr rahe hain , pehli baar add kar raheto qty = 1 . 
+
+                                                                                                         }
+
+                                                                        ---> abhi hume cart ke andr aur bhi properties add akrni hain --->  cart.totalQty = cart.totalQty + 1; 
+                                                                        ---> cart.totalPrice = cart.totalPrice + req.body.price 
+                                                                        ---> going as per ref structure ---> 
+
+                                                                        ---. if cart ke andr already hain vo dish ---> uski jo qty hai bhadani hai --->  cart.items[req.body._id].qty = cart.items[req.body._id].qty +  1 ---->  cart.totalQty = cart.totalQty + 1 ------> cart.totalPrice += req.body.price . 
+
+                                                                        ---> return res.json({ totalQty: req.session.cart.totalQty }) ---> cart ke bagal mei hume total qty dikhane hain in the cart ---> jaise hi add hojata hai item ---> hume response mei cart ki total qty chahiye hogi , taaki we can update here . 
+
+                                                                        ---> save it , and check it once in browser. 
+
+                                                                        ---> in the databse inside session ---> we have key named cart (visible when we xpand the link ) ---> iske anadr items hain ---> jo dishes we have added .  we have full info in it ---> totalQty , totalPrice etc . 
+
+                                                                        --->  Therefore, session ke andr humara cart save ho raha hai ....
+
+                                                                        ------------------------finally , OUR CART IS BEING SAVE IN SESSIONS---------------------------
+
+                                                                        ---> lets go inside client file  ---> 
+                                                                        --------------------> NOW WE HAVE TO UPDATE TOTAL QUANTITY IN CART, IN CART LOGO ON HOMEPAGE. ______________________________________________
+
+
+
+                                                                        -------> cart logo will be accessible in layout.ejs  ---> we have to show numbers besde cart logo  ---> we create a span with id= "cartCounter" -->  and style a bit . 
+
+                                                                        ---> if you want cart logo and number come side by side ---> jo paarent hai  here li , usko flex karna hoga . 
+
+                                                                        ---> we have id --. cartCounter of span 
+                                                                        ----> go to app.js ----> and get it ----> let cartCounter = document.querySelector("#cartCounter") ---> so our span will be get here .
+
+                                                                        ---> now as we have got response in updateCart function ---> the cardCounter 's innerText ---> isko humein change karna hai ---> cartCounter.innerText = res.data.totalQty ---> as we see in console thy response object ---> of it we have to check data property ---> and inside data we have totalQty property .  
+
+                                                                        ---> in this way, cartCounter ke andr jo text hai update hojayega ---> with total qty we get from response . 
+
+                                                                        ---> check in browser ----> CHECK FOR THAT ERROR IN CONSole ----Error solved . 
+
+                                                                        ---> add to cart works fine  ---- > but as soonas we refresh cart gets empty ---> coz we have hard coded it ---> humko zero nahi dikhana ----> 
+                                                                        ---> go to layout --> span id cartcounter ---> mei jo 0 diya tha use hatayenge ---> and will add ejs tag ---> <%= <%= session.cart.totalQty %> %> ---> cart ke andr jo bhi total qty hai humko yahan display karani hai ---> when we refresh browser there is error ---> session is not defined . 
+
+                                                                        ---> isko session nahi mil raha hai ---> cz by default front end ke andr session key available nahi hoti hai ---> humko yahan available karni hogi --> we will use global middlewares . 
+
+                                                                        ----> in server.js ---> //GLOBAL MIDDLEWARES ------> means it work on every req --> 
+
+                                                                        //global middleware
+                                                                                    app.use((req, res, next) => {
+                                                                                        res.locals.session = req.session            ----> jab ye code end hota hai , we have to call next()
+                                                                                        next()                                      ----> else req wont get completed 
+                                                                                    
+                                                                                    })  
+
+                                                                        ----> midddleware is just a normal function , it is function inside app.use (()=>{}) --> in middleware we recieve 3 paramenters ---> (req, res, next )=>{ }   ---> next is callback ---> 
+                                                                        -----. now session key will be available inside layout.ejs --> <%= session.cart ? session.cart.totalQty : "" %> ---> we will check ---> session.cart hai ki nahin , agar hai toh ye dikhado , else yahn pe emplty string dikha do ---> use ternary operator . 
+
+
+                                                                        ---->now it works fine ... refresh akrne pe bhi nahi gayab horaha hai ----> database ke nadr session bhi hai . 
+                                                            ---------> 
+
+                                                            ****--------> WE LIKE TO ADD A FUNCTIONALITY THAT WHEN WE CLICK ON ADD ---> WE GET A POP UP MSG ---> ITEM ADDED TO CART ANIMATION.  .
+
+
+                                                            -------> TO ACHIEVE THIS WE ARE USING A LIBRARY ----> "NOTY" -----> NOTY is a notification library that makes it easy to create alert - success - error - warning - information - confirmation messages as an alternative the standard alert dialog.
+
+
+
+                                                            -------> WE WILL INSTALL IT ...-----> npm i noty ---->  installed . 
+
+                                                            -----> go to our client file ---> app.js ---> isko import karna hoga ---> import Noty from 'noty'  -----> 
+
+                                                            -----> jasie hi hum add karte hain and humara response aajata hai ---> below cartcounter.innertext -----> copy paste code from its website --->  
+
+                                                            new Noty({
+                                                                      text: "Item added to cart "
+                                                                    }).show();
+
+                                                            ----> text mei jo bhi notification humko deta hai ---->   text: "Item added to cart " 
+                                                            -----> to make it work successfully  connect its css also ---> add css ---> go to app.scss ---> import noty ----> @import '~noty/src/noty.scss'; @import '~noty/src/themes/mint.scss'; ----> importing noty and its theme 
+
+                                                            -----> so by adding imports , we have added its css ---> now when we refresh and add item ---> it gets displayed , but not that style . 
+
+                                                            ---> goto app.js ---. new noty section ---> add more code ---> type: "success", ----> green color appears . 
+
+                                                            ---> its working fine. But it is not hidding automaticaly ---> we want it hides auto after  1 or 2 seconds . 
+
+                                                            ---> add more code to new noty section --> timeout: 1000, and progressBar: false ----> jo green area mei ek progress bar chal rah tha , it will be hidden now . 
+
+                                                            ---> if we want its position to be changed , add more code to new noty --> layout : "bottomLeft" -----> we we are not doing that . 
+
+                                                            --->in function update cart ---> we are handling success with .then ----> we also have to handle error . 
+
+
+                                                            -----> one morething , as we click the button , we see a border around the button ---> we have to remove it ---> go to app.scss ---> .add-to-cart { } 
+
+                                                            ---> add to it after &:hover{} , &:focus { outline:none ; } ---> save 
+
+                                                            ----> go to page , now no bordr . 
+
+
+                                -------> ADD TO CART FUNCTIONALITY COMPLETED . --------------------------------------------------------------------------
+
+                        ------> MAKE CART PAGE DYNAMIC , CURRENTLY ITS HARDCODED --------------------------------------------------------------------------
+
+                                                    ------> jO bhi cart ke andr hai , we want ki yan aajaye dynamically 
+                                                    -----> firstly we will find out ki ye cart page kahan se render horaha hai ---> go to routes ---> web.js ----. its coming from cart controller ---> app.get("/cart", cartController().index) ---> go to app/http/controllers/customers/cartcontroller ---->
+                                                    
+                                                    ----> go to cart controller index function ---> or first go to cart.ejs in views ---> as we know we have commented , empty cart page down the code . 
+
+                                                    ---> we delete all items in cart , except one , and we will loop through it , as we did for menu ----> isko hume repeat krna hai but data humko change karna hai ----> so we have to simply loop through ---> using ejs tags ----> 
+
+                                                    ----> we will use for loop ---> but loop chalane ke liye we need array , but we have items as object , not array . 
+
+                                                    ----> we will convert this object to array ---> Object.values(session.cart.items ) ---> object gets converted to array ---> array of values and now we loop using for-of loop . 
+
+                                                    ----> in every iteration we are getting single dish , and close the loop with ejs tag . 
+
+
+                                                    ----> make all the entirees dynamic using ejs tag  ---> name , size, qty, image , rs ----> rs = qty * price . 
+
+                                                    ---> change total amount also  ---->  Rs.<%= session.cart.totalPrice %> 
+
+                                                    -----> if cart is empty , we have to show empty cart page ---> to delete all items of cart ---> we delete the session here ---. to check this page functionality . 
+
+                                                    ---> we will use if-else for this .
+
+                                                    ---> if part mei , cart full page ,and else part mei cart empty page----> using ejs tags 
+
+                                                    ---->  refresh and check, , tip, to see empty cart ---> delete sessions from db 
+
+    --->CART HAS BEEN SUCCESSFULLY MADE DYNAMIC, ADD TO CARTS WORKS FINE, NOTY NOTIFICATIONS WORKS -- ----> 
+***************************************************************************************************************************************************************************************************************************************************************************************************************************
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+____________________________________________________________________________________________________________________________________________________________________________________
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+v7 ---> LOGIN SYSTEM , REGISTRATION SYSTEM , FULL AUTH SYSTEM ---- WE WILL USE PASSPORT ___________________________________________----------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                        ------> BUILD REGISTER CRUD --------------------------------------------------------------------------------
+                                           ------> WE HAVE GET ROUTE FOR REGISTER ----through which our register page is visible .
+                                           ----> now we require to post data request ----> from register page to post data to server. 
+
+                                           ----> and it will go inside same authController, we used for get register route . 
+
+                                           -----> we can have same url for get and post methods, just change the controller method.  
+
+                                           ---> app.post("/register", authController().postRegister)
+
+                                           ---> in authController, make this method ---> sabse pehle hume yahan data recieve hojayega . 
+
+                                           ---> ek variable create karte hain , and we will use object destructuring. 
+
+                                           -->jo bhi data we are about to post, we will find it in req.body. 
+                                           ----> const { name, email, password } = req.body; ---> used object destructuring ---> data in these 3 fields will be sent. 
+
+                                           ---> recieve toh hojayenge, par frontend se usko send bhi karna hai, ---> go to register.ejs 
+
+                                           ---> if we want to send a form , few attributes are added to it ---> < form action(url dena hota hai ki kahan pe humein apna data post krna hai) = "/register"---> and method="POST". 
+
+                                           ---> inputs ke upar name attrribute is very important --->input fileds ka action attribute ka jo value hoga , vahi authcontroller ke vaiable mei store hoga 
+                                           ---> add name attribute to each input tag. 
+
+                                           ---. change type of button to submit . ---> ispe click karne se form submit hojayega . 
+
+                                           ----> move to controller authcontroller.js ----> if we conole req.body and submit the form ---> its not submitting on browser but data logged in console is { } --> empty object . 
+
+                                           ---> express dont know what type of data is going to be recieved ---> we need to tell express explicitly . 
+
+                                           ---> go to server.js ---> express.json() ke upar ---. app.use(express.urlencoded( extended: false)) ---> for url encoded data . 
+
+                                           --->  now again go to browser nad send data ---> abhi bhi ghoom hi rha hai when submit ---> but console has recieved data. 
+
+                                           --->go to controller and right aage ka logic ---> data we are recieving in console, we have to store it in database. 
+
+                                           ----> this is user data , so our database should have user table .or colection . 
+
+                                           ---> lets create collection named user.---> and collection create karne ke liye we need models --->  lets create a file called --> user.js in models 
+
+                                           ---> copy paste from menu.js controller . ---> yaha we need moongoose, schema mei thodachange karna hoga ----> change keys to data we are recieving. 
+
+                                           ---> email: { type: String, required: true, unique: true }, --> email has to be unique . 
+
+                                           ---.  role: { type: String, default: 'customer' }  ---. as we have two types of user ----> customer and admin .
+                                           ---> add time stamp --> v7-0:19:0
+
+                                 
+
+                                           --->v7 15 mins 
+
+
+
+
+
+                                                            
+
+
+
+
+
+
+
+
+
+
+
+                                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+                                                               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
