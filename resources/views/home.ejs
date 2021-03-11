@@ -2,7 +2,7 @@
     <div class="container mx-auto flex items-center justify-between">
         <div class="w-1/2 px-6">
             <h6 class="text-lg"><em>Don’t Starve, Just Order</em></h6>
-            <h1 class="text-6xl font-bold">Freshness Delivered</h1>
+            <h1 class="text-3xl md:text-6xl font-bold">Freshness Delivered</h1>
             <button class=" px-6 py-2 rounded-full text-white font-bold mt-4 btn-primary"> ORDER NOW  </button>
         </div>
 
@@ -21,10 +21,10 @@
     <h1 class="text-xl font-bold mb-8 mx-10"> All Dishes </h1>
 
 
-    <div class="grid grid-cols-4 gap-x-12 gap-y-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-12 gap-y-16">
 
         <% menus.forEach(function(dish){ %>
-            <div>
+            <div class="w-full md:w-64">
                 <img class="mx-10 h-40 mb-4 mx-auto" src="/img/<%=dish.image %>" alt="food items">
                 <div class="mx-10 text-center">
 
@@ -67,8 +67,8 @@
 <section id="offers" class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
         <div class="text-center mb-20">
-            <h1 class="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4">Offers Currently Running !!</h1>
-            <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500s">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh mi pug.</p>
+            <h1 class="sm:text-3xl text-2xl font-medium title-font text-gray-900 mb-4"> Key Highlights</h1>
+            <!-- <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto text-gray-500s"></p> -->
             <div class="flex mt-6 justify-center">
                 <div class="w-16 h-1 rounded-full bg-indigo-500 inline-flex"></div>
             </div>
@@ -81,7 +81,7 @@
             </svg>
                 </div>
                 <div class="flex-grow">
-                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Shooting Stars</h2>
+                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Fast Delivery</h2>
                     <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh mi pug VHS try-hard.</p>
 
 
@@ -97,7 +97,7 @@
             </svg>
                 </div>
                 <div class="flex-grow">
-                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">The Catalyzer</h2>
+                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Proper Hygiene</h2>
                     <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh mi pug VHS try-hard.</p>
 
 
@@ -112,7 +112,7 @@
             </svg>
                 </div>
                 <div class="flex-grow">
-                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Neptune</h2>
+                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">Economical</h2>
                     <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine, ramps microdosing banh mi pug VHS try-hard.</p>
 
 
@@ -133,7 +133,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
               <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
             </svg>
-                    <p class="leading-relaxed mb-6">Synth chartreuse iPhone lomo cray raw denim brunch everyday carry neutra before they sold out fixie 90's microdosing. Tacos pinterest fanny pack venmo, post-ironic heirloom try-hard pabst authentic iceland.</p>
+                    <p class="leading-relaxed mb-6">Superfast delivery and food is awesome.</p>
                     <a class="inline-flex items-center">
                         <img alt="testimonial" src="https://dummyimage.com/106x106" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
                         <span class="flex-grow flex flex-col pl-4">
@@ -148,12 +148,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="block w-5 h-5 text-gray-400 mb-4" viewBox="0 0 975.036 975.036">
               <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
             </svg>
-                    <p class="leading-relaxed mb-6">Synth chartreuse iPhone lomo cray raw denim brunch everyday carry neutra before they sold out fixie 90's microdosing. Tacos pinterest fanny pack venmo, post-ironic heirloom try-hard pabst authentic iceland.</p>
+                    <p class="leading-relaxed mb-6">Loved the north indian food, delivery and hygiene was top notch. Keep up the good work. </p>
                     <a class="inline-flex items-center">
                         <img alt="testimonial" src="https://dummyimage.com/107x107" class="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center">
                         <span class="flex-grow flex flex-col pl-4">
                 <span class="title-font font-medium text-gray-900">Alper Kamu</span>
-                        <span class="text-gray-500 text-sm">MAHARASHTRA, INDIA</span>
+                        <span class="text-gray-500 text-sm">KARNATAKA, INDIA</span>
                         </span>
                     </a>
                 </div>
@@ -171,13 +171,13 @@
 
         <div class="flex flex-wrap -m-4">
 
-            <div class="p-4 lg:w-1/2">
+            <div class="p-4 lg:w-1/2 mx-auto">
                 <div class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left">
-                    <img src="/public/img/avataraj.png" alt="team" class="flex-shrink-0 rounded-lg w-48 h-48 object-cover object-center sm:mb-0 mb-4">
-                    <div class="flex-grow sm:pl-8">
+
+                    <div class="flex-grow sm:pl-8 ">
                         <h2 class="title-font font-medium text-lg text-gray-900">ANJALI</h2>
                         <h3 class="text-gray-500 mb-3">Full Stack Web Developer</h3>
-                        <p class="mb-4">DIY tote bag drinking vinegar cronut adaptogen squid fanny pack vaporware.</p>
+
 
                     </div>
                 </div>
@@ -185,11 +185,11 @@
 
             <div class="p-4 lg:w-1/2">
                 <div class="h-full flex sm:flex-row flex-col items-center sm:justify-start justify-center text-center sm:text-left">
-                    <img src="/public/img/avataran.png" alt="team" class="flex-shrink-0 rounded-lg w-48 h-48 object-cover object-center sm:mb-0 mb-4">
+
                     <div class="flex-grow sm:pl-8">
                         <h2 class="title-font font-medium text-lg text-gray-900">ANUJ</h2>
                         <h3 class="text-gray-500 mb-3">Full Stack Web Developer</h3>
-                        <p class="mb-4">DIY tote bag drinking vinegar cronut adaptogen squid fanny pack vaporware.</p>
+
 
                     </div>
                 </div>

@@ -29,9 +29,11 @@
         <div>
             <ul class="flex items-center">
                 <li class='ml-6'><a href="/">Menu</a></li>
-                <li class='ml-6'><a href="#offers">Offers</a></li>
+
                 <% if(user) { %>
                     <li class='ml-6'>
+                        <li class="mr-2"><a href="/customers/orders">Orders</a></li>
+
                         <form id="logout" action="/logout" method="POST">
 
                             <a class="px-4" onclick="document.getElementById('logout').submit()" href="#">Logout</a>

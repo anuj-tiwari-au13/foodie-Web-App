@@ -1993,8 +1993,8 @@ function updateStatus(order) {
 
 updateStatus(order); //Socket
 
-var socket = io();
-_admin__WEBPACK_IMPORTED_MODULE_2___default()(socket); // Join
+var socket = io(); // initAdmin(socket)
+// Join
 
 if (order) {
   socket.emit('join', "order_".concat(order._id));
@@ -2003,7 +2003,7 @@ if (order) {
 var adminAreaPath = window.location.pathname;
 
 if (adminAreaPath.includes('admin')) {
-  //     initAdmin(socket)
+  _admin__WEBPACK_IMPORTED_MODULE_2___default()(socket);
   socket.emit('join', 'adminRoom');
 }
 
